@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {AppRegistry,StyleSheet,ListView,Text,View,Image, 
         Button,TextInput,Navigator,TouchableHighlight} from 'react-native';
 
+import ToolBar from '../ToolBar';
+import BaseBar from '../BaseBar';
 
 
 export default class HomeScreen extends Component {
@@ -10,26 +12,45 @@ export default class HomeScreen extends Component {
       this.navigate = this.navigate.bind(this);
   }
   
-  onPress() {this.props.navigator.push({id: 'SplashScreen'});}
-  artistOnPress() {this.props.navigator.push({id: 'Artists'});}
- 
+
   navigate(route) {
     this.props.navigator.push({id: route});
   }
 
   render() {
     return (
-      <View>
+      <View style={styles.page}>
         <View>
-            <TextInput style={styles.searchBar}>Search</TextInput>
+            <ToolBar sceneName={'Home'} navigator={this.props.navigator}/>
         </View>
-        <View style={styles.row}>
-            <Text onPress={() => {this.artistOnPress()}} style={styles.rowText}>Artists</Text>
+
+        <View style={styles.list}>
+
+            <View>
+                <TextInput style={styles.searchBar}>Search</TextInput>
+            </View>
+            
+            <TouchableHighlight underlayColor='#bbbbbb' style={styles.row}  onPress={() => {this.navigate('Artists')}}>
+                <Text style={styles.rowText}>Artists</Text>
+            </TouchableHighlight>
+               
+            
+            <TouchableHighlight underlayColor='#bbbbbb' style={styles.row} onPress={() => {this.navigate('Albums')}}>
+                <Text style={styles.rowText}>Albums</Text>
+            </TouchableHighlight>
+
+            <TouchableHighlight underlayColor='#bbbbbb' style={styles.row} onPress={() => {this.navigate('SevenInch')}}>
+                <Text style={styles.rowText}>7"</Text>
+            </TouchableHighlight>
+
+            <TouchableHighlight underlayColor='#bbbbbb' style={styles.row} onPress={() => {this.navigate('TwelveInch')}}>
+                <Text style={styles.rowText}>12"</Text>
+            </TouchableHighlight>
+
         </View>
-        <View style={styles.row}>
-            <Text onPress={() => {this.navigate('Albums')}} style={styles.rowText}>Albums</Text>
-        </View>
-        <Button  title="Yo" onPress={() => {this.props.navigator.pop()}}/>
+        
+         <BaseBar navigator={this.props.navigator}/>
+
       </View>
     );
   }
@@ -37,12 +58,24 @@ export default class HomeScreen extends Component {
 
 
 const styles = StyleSheet.create({
+    addButton : {
+        margin:1,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        fontSize: 48,
+        borderWidth: 2,
+        borderColor: "#aaaaaa"
+    },
+    list: {
+        flex:1
+
+    },
     searchBar: {
         marginLeft: '10%'
     },
     backButton: {
-        position:'absolute',
-        bottom:'0'
+        alignSelf: 'center',
+        flex: 1
     },
     row: {
         flexDirection: 'row',
@@ -52,8 +85,12 @@ const styles = StyleSheet.create({
         marginBottom:3
     },
     rowText : {
-        fontSize: 20,
+        fontSize: 30,
         flex:1
+    },
+    page: {
+        height: '100%',
+        flexDirection: 'column'
     }
 });
 

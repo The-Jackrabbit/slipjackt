@@ -7,30 +7,59 @@ import {
   Image, 
   Button,
   TextInput,
-  Navigator
+  Navigator,
+  AsyncStorage
 } from 'react-native';
 
 export default class SplashScreen extends Component {
+  constructor() {
+    super();
+    this.state = {
+      myKey:"man"
+    }
+  }
+  componentDidMount() {
+    AsyncStorage.getItem("myKey").then((value) => {
+      this.setState({"myKey": value});
+    });
+  }
 
   onPress() {
-        this.props.navigator.push({
-            id: 'HomeScreen'
-        });
+      this.props.navigator.push({
+          id: 'HomeScreen'
+      });
     }
   render() {
+    if (this.state.myKey !== 'man') {
+      return (
+      <View style={styles.splash}>
+        <Image source={require('./record325.png')} style={styles.imageStyle2}/>
+        <Text style={styles.jeffery}> Hey {this.state.myKey}, what's up?</Text>
+        <View style={styles.nameEntry}>  
+           <Button title="Start" onPress={() => {this.onPress()}} style={styles.buttonStyle}/>
+        </View>
+      </View>
+    );
+    }
     return (
       <View style={styles.splash}>
-        <Image source={require('./test_record.png')} style={styles.imageStyle}/>
-        
-        <Text style={styles.jeffery}> Hey man, what's up?  Go ahead and put your {'\n'} first name in the box below </Text>
+        <Image source={require('./record225.png')} style={styles.imageStyle}/>
+        <Text style={styles.jeffery}> Hey {this.state.myKey}, what's up?  Go ahead and put your {'\n'} first name in the box below </Text>
         <View style={styles.nameEntry}>  
-            <TextInput style={styles.inputStyle}> Enter Name Here</TextInput> 
+            <TextInput onChangeText={(text) => this.saveData(text)} style={styles.inputStyle}> Enter Name Here</TextInput> 
             <Button title="Start" onPress={() => {this.onPress()}} style={styles.buttonStyle}/>
         </View>
       </View>
     );
   }
+
+  saveData(value) {
+    AsyncStorage.setItem("myKey", value);
+    this.setState({"myKey": value});
+  };
 }
+
+
 
 const styles = StyleSheet.create({
 
@@ -55,6 +84,13 @@ const styles = StyleSheet.create({
       marginTop:25,
       width:225,
       height:225,
+      borderBottomWidth: 10, 
+      borderColor: "#a7d49b"
+  },
+  imageStyle2: {
+      marginTop:25,
+      width:325,
+      height:325,
       borderBottomWidth: 10, 
       borderColor: "#a7d49b"
   },
